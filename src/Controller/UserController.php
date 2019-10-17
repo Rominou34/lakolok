@@ -4,16 +4,31 @@ namespace App\Controller;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class UserController extends AbstractController {
 
+    /** @var EntityManagerInterface */
+    private $em;
+
+    /** @var SerializerInterface */
+    private $serializer;
+
+    public function __construct(EntityManagerInterface $em, SerializerInterface $serializer)
+    {
+        $this->em = $em;
+        $this->serializer = $serializer;
+    }
+
     /**
-     * @Route("/user/create", name="createUser")
+     * @Route("/api/user/create", name="createUser")
      */
-    public function createUser(): Response {
+    public function create(): Response {
         $entityManager = $this->getDoctrine()->getManager();
 
         $user = new User();
@@ -34,9 +49,9 @@ class UserController extends AbstractController {
     }
 
     /**
-     * @Route("/api/user/{id}", name="getUserApi")
+     * @Route("/api/user/{id}", name="getUser")
      */
-    public function getApi($id) {
+    public function get($id): Response {
         $user = $this->getDoctrine()
             ->getRepository(User::class)
             ->find($id);
@@ -44,6 +59,14 @@ class UserController extends AbstractController {
         if(!$user) {
             throw $this->createNotFoundException('No user found for id '.$id);
         }
-        return new Response('User #'.$id.' is '.$user->getName().' '.$user->getLastname());
+        $data = $this->serializer->serialize($user, JsonEncoder::FORMAT);
+        return new JsonResponse($data, Response::HTTP_OK, [], true);
+    }
+
+    /**
+     * @Route("/api/users", name="getAllUsers")
+     */
+    public function getAll(): Response {
+        return new Response("All users");
     }
 }
