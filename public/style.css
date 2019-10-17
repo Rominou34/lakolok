@@ -65,3 +65,16 @@ main {
     padding: 24px;
     margin: auto;
 }
+/*
+index:
+    path: /
+    controller: App\Controller\DefaultController::index
+
+infos:
+    path: /infos
+    controller: App\Controller\DefaultController::infos
+
+spendings:
+    path: /spendings
+    controller: App\Controller\SpendingsController::index
+    */
