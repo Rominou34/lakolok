@@ -1,0 +1,23 @@
+body {
+    padding-left: 180px;
+}
+#sidebar {
+    margin-top: 48px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 180px;
+    background-color: #002739;
+}
+#sidebar a,
+#sidebar a:visited {
+    display: block;
+    padding: 24px;
+    text-decoration: none;
+    color: #fafaf1;
+}
+#sidebar a:hover,
+#sidebar a:focus {
+    background-color: #00628f;
+}

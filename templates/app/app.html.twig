@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}LaKolok - Interface de gestion{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="app.css"/>
+{% endblock %}
+
+{% block main %}
+    <main>
+        <div id="sidebar">
+            <a href="/spendings">Spendings</a>
+            <a href="/errands">Errands</a>
+            <a href="/tasks">Tasks</a>
+            <a href="/planning">Planning</a>
+        </div>
+        <div id="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+{% endblock %}
