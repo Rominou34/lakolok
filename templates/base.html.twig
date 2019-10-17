@@ -2,37 +2,12 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}LaKolok{% endblock %}</title>
-        {% block stylesheets %}
-            <link rel="stylesheet" href="style.css"/>
-            <!--<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>!-->
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+        <title>Lakolok</title>
+        <link rel="stylesheet" href="/style.css"/>
+        {{ encore_entry_link_tags('app') }}
     </head>
     <body>
         <div id="app"></div>
-        <!--
-        {% block header %}
-            <header>
-                <div id="logo">Logo</div>
-                <nav>
-                    <a href="/">Accueil</a>
-                    <a href="/infos">Infos</a>
-                </nav>
-                <div id="login-container">
-                    Connexion
-                </div>
-            </header>
-        {% endblock %}
-        {% block main %}
-            <main>
-                {% block content %}
-                    Base
-                {% endblock %}
-            </main>
-        {% endblock %}
-        {% block javascripts %}{% endblock %}
-        !-->
         {{ encore_entry_script_tags('app') }}
     </body>
 </html>

@@ -32,12 +32,17 @@ header {
     flex-wrap: nowrap;
     align-items: stretch;
 }
-header nav {
+header nav,
+header #navbarNav .navbar-nav {
+    margin: 0;
     display: flex;
     flex-wrap: nowrap;
     align-items: stretch;
     justify-content: space-around;
     height: 48px;
+}
+header #navbarNav .navbar-nav li {
+    list-style: none;
 }
 header nav a,
 header nav a:visited {
@@ -47,12 +52,12 @@ header nav a:visited {
     color: #fafaf1;
     flex: 120px 0 0;
 }
-header nav > a:hover,
-header nav > a:focus  {
+header nav a:hover,
+header nav a:focus  {
     background-color: #00628f;
 }
 
-main {
+#main-container {
     margin-top: 48px;
     padding-top: 36px;
 }
@@ -65,16 +70,3 @@ main {
     padding: 24px;
     margin: auto;
 }
-/*
-index:
-    path: /
-    controller: App\Controller\DefaultController::index
-
-infos:
-    path: /infos
-    controller: App\Controller\DefaultController::infos
-
-spendings:
-    path: /spendings
-    controller: App\Controller\SpendingsController::index
-    */
