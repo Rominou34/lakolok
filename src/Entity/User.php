@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -20,6 +23,11 @@ class User
      * @ORM\Column(type="string", length=255)
      */
     private $login;
+
+    /**
+     * @var string|null
+     */
+    private $plainPassword;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -55,6 +63,26 @@ class User
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $nickname;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $created;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $updated;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Spending", mappedBy="user")
+     */
+    private $spendings;
+
+    public function __construct()
+    {
+        $this->spendings = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -153,6 +181,77 @@ class User
     public function setNickname(?string $nickname): self
     {
         $this->nickname = $nickname;
+
+        return $this;
+    }
+
+    public function getCreated(): ?\DateTimeInterface
+    {
+        return $this->created;
+    }
+
+    public function setCreated(\DateTimeInterface $created): self
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    public function getUpdated(): ?\DateTimeInterface
+    {
+        return $this->updated;
+    }
+
+    public function setUpdated(\DateTimeInterface $updated): self
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     * 
+     * @throws Exception
+     */
+    public function onPrePersist(): void {
+        $this->created = new DateTime('NOW');
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function onPreUpdate(): void {
+        $this->updated = new DateTime('NOW');
+    }
+
+    /**
+     * @return Collection|Spending[]
+     */
+    public function getSpendings(): Collection
+    {
+        return $this->spendings;
+    }
+
+    public function addSpending(Spending $spending): self
+    {
+        if (!$this->spendings->contains($spending)) {
+            $this->spendings[] = $spending;
+            $spending->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSpending(Spending $spending): self
+    {
+        if ($this->spendings->contains($spending)) {
+            $this->spendings->removeElement($spending);
+            // set the owning side to null (unless already changed)
+            if ($spending->getUser() === $this) {
+                $spending->setUser(null);
+            }
+        }
 
         return $this;
     }

@@ -67,6 +67,9 @@ class UserController extends AbstractController {
      * @Route("/api/users", name="getAllUsers")
      */
     public function getAll(): Response {
-        return new Response("All users");
+        $users = $this->em->getRepository(User::class)->findBy([], ['id' => 'DESC']);
+        $data = $this->serializer->serialize($users, JsonEncoder::FORMAT);
+
+        return new JsonResponse($data, Response::HTTP_OK, [], true);
     }
 }

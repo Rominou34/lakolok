@@ -6,7 +6,7 @@ export default {
             message: message
         });
     },
-    findAll() {
+    getAll() {
         return axios.get("/api/users");
     },
     get(id) {
