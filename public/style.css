@@ -17,8 +17,26 @@ html, body, p, div, article, h1, h2, h3, h4, h5, h6, form {
 }
 
 html {
-    background-color: #001c29;
+    background-color: #162024;
     color: #fafaf1;
+}
+
+body {
+    min-height: 100vh;
+    padding-top: 48px;
+}
+
+footer {
+    width: 100%;
+    padding: 24px;
+    background-color: #222f36;
+    height: 80px;
+}
+
+/* SYMFONY DEBUG TOOLBAR */
+.sf-toolbar {
+    position: fixed;
+    bottom: 0;
 }
 
 /* BASIC STYLE */
@@ -28,15 +46,15 @@ table {
 }
 table thead th {
     text-align: left;
-    border-bottom: 2px solid #00628f;
+    border-bottom: 2px solid #5c7b8a;
     padding: 16px;
 }
 table td {
-    border-bottom: 1px solid #00628f;
+    border-bottom: 1px solid #5c7b8a;
     padding: 16px;
 }
 table.hover tr:hover > td {
-    background-color: #003f5c;
+    background-color: #384d57;
 }
 tr.clickable:hover {
     cursor: pointer;
@@ -78,7 +96,7 @@ header {
     top: 0;
     left: 0;
     right: 0;
-    background-color: #003f5c;
+    background-color: #384d57;
     display: flex;
     justify-content: space-between;
     flex-wrap: nowrap;
@@ -108,20 +126,26 @@ header nav a:visited {
 }
 header nav a:hover,
 header nav a:focus  {
-    background-color: #00628f;
+    background-color: #5c7b8a;
 }
 
 /* CONTENT */
 #main-container {
-    margin-top: 48px;
     padding-top: 36px;
+    min-height: calc(100vh - 128px);
 }
 #content {
     width: 90%;
     max-width: 1200px;
-    background-color: #002739;
-    border: 1px solid #003f5c;
-    border-radius: 8px;
-    padding: 24px;
+    background-color: #222f36;
+    border: 1px solid #384d57;
     margin: auto;
+}
+#content h1 {
+    display: block;
+    padding: 24px;
+    background-color: #384d57;
+}
+#content .container {
+    padding: 24px;
 }

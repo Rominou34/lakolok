@@ -1,17 +1,17 @@
 <template>
     <div id="user">
-        <div class="row col">
-            <h1>
-                {{ user.name }} {{ user.lastname }}
-                <span v-if="user.nickname">({{ user.nickname }})</span>
-            </h1>
-            <hr/>
-            <p>
-                Login: {{ user.login }}
-            </p>
-            <p>
-                E-mail: {{ user.mail }}
-            </p>
+        <h1>{{ user.name }} {{ user.lastname }}</h1>
+        <div class="container">
+            <div class="row col">
+                <h2>{{ user.nickname }}</h2>
+                <hr/>
+                <p>
+                    Login: {{ user.login }}
+                </p>
+                <p>
+                    E-mail: {{ user.mail }}
+                </p>
+            </div>
         </div>
     </div>
 </template>

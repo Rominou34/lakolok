@@ -1,25 +1,28 @@
 <template>
     <div id="spendings">
-        <table>
-            <thead>
-                <th>Name</th>
-                <th>Amount</th>
-                <th>User</th>
-                <th>Date</th>
-            </thead>
-            <tbody>
-                <tr v-for="spending in spendings" v-bind:key="spending.id">
-                    <td>{{ spending.lib }}</td>
-                    <td>{{ spending.amount }}</td>
-                    <td>
-                        <router-link v-bind:to="'/user/' + spending.userid" tag="a" class="pointer hover-underline">
-                            {{ spending.username }}
-                        </router-link>
-                    </td>
-                    <td>{{ spending.date }}</td>
-                </tr>
-            </tbody>
-        </table>
+        <h1>Spendings</h1>
+        <div class="container">
+            <table>
+                <thead>
+                    <th>Name</th>
+                    <th>Amount</th>
+                    <th>User</th>
+                    <th>Date</th>
+                </thead>
+                <tbody>
+                    <tr v-for="spending in spendings" v-bind:key="spending.id">
+                        <td>{{ spending.lib }}</td>
+                        <td>{{ spending.amount }}</td>
+                        <td>
+                            <router-link v-bind:to="'/user/' + spending.userid" tag="a" class="pointer hover-underline">
+                                {{ spending.username }}
+                            </router-link>
+                        </td>
+                        <td>{{ spending.date }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
 
