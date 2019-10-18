@@ -210,22 +210,6 @@ class User
     }
 
     /**
-     * @ORM\PrePersist
-     * 
-     * @throws Exception
-     */
-    public function onPrePersist(): void {
-        $this->created = new DateTime('NOW');
-    }
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function onPreUpdate(): void {
-        $this->updated = new DateTime('NOW');
-    }
-
-    /**
      * @return Collection|Spending[]
      */
     public function getSpendings(): Collection
@@ -254,5 +238,21 @@ class User
         }
 
         return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     * 
+     * @throws Exception
+     */
+    public function onPrePersist(): void {
+        $this->created = new DateTime('NOW');
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function onPreUpdate(): void {
+        $this->updated = new DateTime('NOW');
     }
 }

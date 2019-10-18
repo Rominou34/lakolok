@@ -41,6 +41,10 @@ table.hover tr:hover > td {
 tr.clickable:hover {
     cursor: pointer;
 }
+a,
+a:visited {
+    color: #fafaf1;
+}
 
 /* HELPERS */
 .bold {
@@ -57,6 +61,15 @@ tr.clickable:hover {
 }
 .text-right {
     text-align: right;
+}
+.pointer {
+    cursor: pointer;
+}
+.hover-underline {
+    text-decoration: none;
+}
+.hover-underline:hover {
+    text-decoration: underline;
 }
 
 /* HEADER */
@@ -90,6 +103,8 @@ header nav a:visited {
     text-decoration: none;
     color: #fafaf1;
     flex: 120px 0 0;
+    text-align: center;
+    line-height: 24px;
 }
 header nav a:hover,
 header nav a:focus  {

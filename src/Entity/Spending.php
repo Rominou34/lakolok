@@ -89,4 +89,13 @@ class Spending
 
         return $this;
     }
+
+    /**
+     * @ORM\PrePersist
+     * 
+     * @throws Exception
+     */
+    public function onPrePersist(): void {
+        $this->created = new DateTime('NOW');
+    }
 }

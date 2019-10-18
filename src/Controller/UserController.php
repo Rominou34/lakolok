@@ -10,6 +10,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+
 
 class UserController extends AbstractController {
 
@@ -59,7 +63,18 @@ class UserController extends AbstractController {
         if(!$user) {
             throw $this->createNotFoundException('No user found for id '.$id);
         }
-        $data = $this->serializer->serialize($user, JsonEncoder::FORMAT);
+
+        $encoder = new JsonEncoder();
+        $defaultContext = [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
+        ];
+        $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
+
+        $serializer = new Serializer([$normalizer], [$encoder]);
+
+        $data = $serializer->serialize($user, JsonEncoder::FORMAT);
         return new JsonResponse($data, Response::HTTP_OK, [], true);
     }
 
