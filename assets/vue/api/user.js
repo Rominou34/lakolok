@@ -1,10 +1,8 @@
 import axios from "axios";
 
 export default {
-    create(message) {
-        return axios.post("/api/users", {
-            message: message
-        });
+    signup(user) {
+        return axios.post("/api/users/signup", user);
     },
     getAll() {
         return axios.get("/api/users");

@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use FOS\RestBundle\Controller\Annotations as Rest;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -14,8 +16,10 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
-
-class UserController extends AbstractController {
+/**
+ * @Rest\Route("/api/users")
+ */
+final class UserController extends AbstractController {
 
     /** @var EntityManagerInterface */
     private $em;
@@ -30,18 +34,19 @@ class UserController extends AbstractController {
     }
 
     /**
-     * @Route("/api/user/create", name="createUser")
+     * @Rest\Post("/signup", name="signupUser")
      */
-    public function create(): Response {
+    public function signup(Request $request): Response {
         $entityManager = $this->getDoctrine()->getManager();
+        $request = $request->request;
 
         $user = new User();
-        $user->setLogin('test');
-        $user->setPassword('toast');
-        $user->setMail('test@gmail.com');
-        $user->setName('Test');
-        $user->setLastname('Toast');
-        $user->setNickname('testou');
+        $user->setLogin($request->get('login'));
+        $user->setPassword($request->get('password'));
+        $user->setMail($request->get('mail'));
+        $user->setName($request->get('name'));
+        $user->setLastname($request->get('lastname'));
+        $user->setNickname($request->get('nickname'));
 
         // tell Doctrine you want to (eventually) save the Product (no queries yet)
         $entityManager->persist($user);
@@ -49,11 +54,15 @@ class UserController extends AbstractController {
         // actually executes the queries (i.e. the INSERT query)
         $entityManager->flush();
 
-        return new Response('Saved new product with id '.$user->getId());
+        $data = [
+            'id' => $user->getId()
+        ];
+        $data = $this->serializer->serialize($data, JsonEncoder::FORMAT);
+        return new JsonResponse($data, Response::HTTP_OK, [], true);
     }
 
     /**
-     * @Route("/api/user/{id}", name="showUser")
+     * @Rest\Get("/api/user/{id}", name="showUser")
      */
     public function showUser($id): Response {
         $user = $this->getDoctrine()
@@ -78,7 +87,7 @@ class UserController extends AbstractController {
     }
 
     /**
-     * @Route("/api/users", name="getAllUsers")
+     * @Rest\Get("/", name="getAllUsers")
      */
     public function getAll(): Response {
         $users = $this->em->getRepository(User::class)->findBy([], ['id' => 'DESC']);
@@ -98,7 +107,7 @@ class UserController extends AbstractController {
     }
 
     /**
-     * @Route("/api/users/short", name="getAllUsersShort")
+     * @Rest\Get("/short", name="getAllUsersShort")
      */
     public function getAllShort(): Response {
         $qb = $this->em->getRepository(User::class)->createQueryBuilder('u')

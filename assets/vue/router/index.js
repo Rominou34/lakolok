@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Home from "../views/Home";
 import User from "../views/User";
 import UserList from "../views/UserList";
+import Signup from "../views/Signup";
 import Spendings from "../views/Spendings";
 
 Vue.use(VueRouter);
@@ -14,6 +15,7 @@ export default new VueRouter({
         { path: "*", redirect: "/" },
         { path: "/users", component: UserList },
         { path: "/user/:id", component: User },
+        { path: "/signup", component: Signup },
         { path: "/spendings", component: Spendings }
     ]
 });
