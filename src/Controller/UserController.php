@@ -53,9 +53,9 @@ class UserController extends AbstractController {
     }
 
     /**
-     * @Route("/api/user/{id}", name="getUser")
+     * @Route("/api/user/{id}", name="showUser")
      */
-    public function get($id): Response {
+    public function showUser($id): Response {
         $user = $this->getDoctrine()
             ->getRepository(User::class)
             ->find($id);
@@ -82,6 +82,30 @@ class UserController extends AbstractController {
      */
     public function getAll(): Response {
         $users = $this->em->getRepository(User::class)->findBy([], ['id' => 'DESC']);
+
+        $encoder = new JsonEncoder();
+        $defaultContext = [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
+        ];
+        $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
+        $serializer = new Serializer([$normalizer], [$encoder]);
+
+        $data = $serializer->serialize($users, JsonEncoder::FORMAT);
+
+        return new JsonResponse($data, Response::HTTP_OK, [], true);
+    }
+
+    /**
+     * @Route("/api/users/short", name="getAllUsersShort")
+     */
+    public function getAllShort(): Response {
+        $qb = $this->em->getRepository(User::class)->createQueryBuilder('u')
+            ->select('u.id, u.name, u.lastname')
+            ->orderBy('u.id', 'DESC');
+
+        $users = $qb->getQuery()->getResult();
 
         $encoder = new JsonEncoder();
         $defaultContext = [

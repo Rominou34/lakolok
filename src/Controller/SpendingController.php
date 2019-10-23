@@ -56,7 +56,7 @@ class SpendingController extends AbstractController {
     /**
      * @Route("/api/spending/{id}", name="getSpending")
      */
-    public function get($id): Response {
+    public function getSpending($id): Response {
         $spending = $this->getDoctrine()
             ->getRepository(Spending::class)
             ->find($id);

@@ -2,8 +2,8 @@
     <div id="userlist">
         <h1>Users</h1>
         <div class="container">
-            <table class="hover">
-                <thead>
+            <table class="table hover">
+                <thead class="thead-light">
                     <th>Nom</th>
                     <th>Prénom</th>
                     <th>Login</th>
@@ -19,6 +19,13 @@
                         <td>{{ user.email }}</td>
                         <td>{{ user.nickname }}</td>
                     </router-link>
+                    <tr v-if="!users.length">
+                        <td colspan="5" class="text-center">
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
