@@ -4,7 +4,7 @@
         <div class="container">
             {{ new_spending }}
             <div class="container">
-                <form v-on:submit.prevent="saveSpending(new_spending)">
+                <form v-on:submit.prevent="createSpending(new_spending)">
                     <div class="form-row">
                         <div class="col-3">
                             <label for="new-spending-name" class="sr-only">Name</label>
@@ -72,7 +72,7 @@
 
 <script>
 import SpendingAPI from "../api/spending";
-import UserApi from "../api/user";
+import UserAPI from "../api/user";
 
 export default {
     name: "Spendings",
@@ -87,14 +87,21 @@ export default {
         SpendingAPI.getAll().then((response) => {
             this.spendings = response.data
         });
-        UserApi.getAllShort().then((response) => {
+        UserAPI.getAllShort().then((response) => {
             this.users = response.data;
         });
     },
     methods: {
-        saveSpending(spending) {
+        createSpending(spending) {
             console.log(spending);
-            console.log(spending.name);
+            SpendingAPI.new(spending).then((response) => {
+                console.log(response);
+                if(response.data && response.data.id) {
+                    SpendingAPI.getAll().then((response) => {
+                        this.spendings = response.data;
+                    });
+                }
+            });
         }
     }
 };

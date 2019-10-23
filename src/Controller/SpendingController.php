@@ -5,8 +5,10 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Spending;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use FOS\RestBundle\Controller\Annotations as Rest;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -15,7 +17,10 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
-class SpendingController extends AbstractController {
+/**
+ * @Rest\Route("/api/spendings")
+ */
+final class SpendingController extends AbstractController {
     /** @var EntityManagerInterface */
     private $em;
 
@@ -29,15 +34,18 @@ class SpendingController extends AbstractController {
     }
 
     /**
-     * @Route("/api/spending/create", name="createSpending")
+     *
+     * @Rest\Post("/new", name="newSpending")
      */
-    public function create(): Response {
+    public function new(Request $request): Response {
         $entityManager = $this->getDoctrine()->getManager();
+        $request = $request->request;
 
         $spending = new Spending();
-        $spending->setLib('test');
-        $spending->setAmount(rand(0,250));
-        $user = $this->getDoctrine()->getRepository(User::class)->find(1);
+        $spending->setLib($request->get('name'));
+        $spending->setAmount((float)$request->get('amount'));
+        $spending->setDate(new \DateTime($request->get('date')));
+        $user = $this->getDoctrine()->getRepository(User::class)->find($request->get('user'));
         $spending->setUser($user);
 
         // tell Doctrine you want to (eventually) save the Product (no queries yet)
@@ -54,7 +62,10 @@ class SpendingController extends AbstractController {
     }
 
     /**
-     * @Route("/api/spending/{id}", name="getSpending")
+     * 
+     * @throws BadRequestHttpException
+     *
+     * @Rest\Get("/{id}", name="getSpending")
      */
     public function getSpending($id): Response {
         $spending = $this->getDoctrine()
@@ -69,7 +80,8 @@ class SpendingController extends AbstractController {
     }
 
     /**
-     * @Route("/api/spendings", name="getAllSpendings")
+     *
+     * @Rest\Get("/", name="getAll")
      */
     public function getAll(): Response {
         $spendings = $this->em->getRepository(Spending::class)->findBy([], ['date' => 'DESC']);

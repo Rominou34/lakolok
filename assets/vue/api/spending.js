@@ -1,15 +1,13 @@
 import axios from "axios";
 
 export default {
-    create(message) {
-        return axios.post("/api/spendings", {
-            message: message
-        });
+    new(spending) {
+        return axios.post("/api/spendings/new", spending);
     },
     getAll() {
         return axios.get("/api/spendings");
     },
     get(id) {
-        return axios.get("/api/spending/" + id);
-    }
+        return axios.get("/api/spendings/" + id);
+    },
 };
