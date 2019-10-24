@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 /**
- * @Rest\Route("/api/users")
+ * @Rest\Route("/api")
  */
 final class UserController extends AbstractController {
 
@@ -34,7 +34,7 @@ final class UserController extends AbstractController {
     }
 
     /**
-     * @Rest\Post("/signup", name="signupUser")
+     * @Rest\Post("/users/signup", name="signupUser")
      */
     public function signup(Request $request): Response {
         $entityManager = $this->getDoctrine()->getManager();
@@ -62,7 +62,7 @@ final class UserController extends AbstractController {
     }
 
     /**
-     * @Rest\Get("/api/user/{id}", name="showUser")
+     * @Rest\Get("/user/{id}", name="showUser")
      */
     public function showUser($id): Response {
         $user = $this->getDoctrine()
@@ -87,7 +87,7 @@ final class UserController extends AbstractController {
     }
 
     /**
-     * @Rest\Get("/", name="getAllUsers")
+     * @Rest\Get("/users", name="getAllUsers")
      */
     public function getAll(): Response {
         $users = $this->em->getRepository(User::class)->findBy([], ['id' => 'DESC']);
@@ -107,7 +107,7 @@ final class UserController extends AbstractController {
     }
 
     /**
-     * @Rest\Get("/short", name="getAllUsersShort")
+     * @Rest\Get("/users/short", name="getAllUsersShort")
      */
     public function getAllShort(): Response {
         $qb = $this->em->getRepository(User::class)->createQueryBuilder('u')

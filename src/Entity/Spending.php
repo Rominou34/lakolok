@@ -19,7 +19,7 @@ class Spending
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $lib;
+    private $name;
 
     /**
      * @ORM\Column(type="float")
@@ -42,14 +42,14 @@ class Spending
         return $this->id;
     }
 
-    public function getLib(): ?string
+    public function getName(): ?string
     {
-        return $this->lib;
+        return $this->name;
     }
 
-    public function setLib(string $lib): self
+    public function setName(string $name): self
     {
-        $this->lib = $lib;
+        $this->name = $name;
 
         return $this;
     }

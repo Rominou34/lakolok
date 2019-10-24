@@ -9,17 +9,17 @@
                         <div class="col-3">
                             <label for="new-spending-name" class="sr-only">Name</label>
                             <input type="text" class="form-control" id="new-spending-name"
-                                v-model="new_spending.name" placeholder="Name"/>
+                                v-model="new_spending.name" placeholder="Name" required/>
                         </div>
                         <div class="col-2">
                             <label for="new-spending-amount" class="sr-only">Amount</label>
                             <input type="number" class="form-control" id="new-spending-amount"
-                                v-model="new_spending.amount" placeholder="Amount"/>
+                                v-model="new_spending.amount" placeholder="Amount" required/>
                         </div>
                         <div class="col-3">
                             <label for="new-spending-user" class="sr-only">User</label>
                             <select class="form-control" id="new-spending-user"
-                                v-model="new_spending.user">
+                                v-model="new_spending.user" required>
                                 <option v-for="user in users" v-bind:value="user.id" v-bind:key="user.id">
                                     {{ user.name }} {{ user.lastname }}
                                 </option>
@@ -48,16 +48,16 @@
                 </thead>
                 <tbody>
                     <tr v-for="spending in spendings" v-bind:key="spending.id">
-                        <td>{{ spending.lib }}</td>
+                        <td>{{ spending.name }}</td>
                         <td>{{ spending.amount }}</td>
                         <td>
                             <router-link v-bind:to="'/user/' + spending.userid" tag="a" class="pointer hover-underline">
                                 {{ spending.username }}
                             </router-link>
                         </td>
-                        <td>{{ spending.date }}</td>
+                        <td>{{ spending.displayDate }}</td>
                     </tr>
-                    <tr v-if="!spendings.length">
+                    <tr v-if="!loaded">
                         <td colspan="4" class="text-center">
                             <div class="spinner-border" role="status">
                                 <span class="sr-only">Loading...</span>
@@ -80,26 +80,35 @@ export default {
         return {
             spendings: [],
             new_spending: {},
-            users: []
+            users: [],
+            loaded: false
         }
     },
     created() {
-        SpendingAPI.getAll().then((response) => {
-            this.spendings = response.data
-        });
+        this.getSpendings();
         UserAPI.getAllShort().then((response) => {
             this.users = response.data;
         });
     },
     methods: {
+        getSpendings() {
+            SpendingAPI.getAll().then((response) => {
+                this.loaded = true;
+                this.spendings = response.data
+                this.spendings.forEach(spending => {
+                    if(typeof spending.date != "undefined") {
+                        spending.displayDate = new Date(spending.date).toLocaleDateString();
+                    }
+                });
+            });
+        },
         createSpending(spending) {
             console.log(spending);
             SpendingAPI.new(spending).then((response) => {
                 console.log(response);
-                if(response.data && response.data.id) {
-                    SpendingAPI.getAll().then((response) => {
-                        this.spendings = response.data;
-                    });
+                if(response.data && response.data.spending) {
+                    console.log(response.data.spending);
+                    this.spendings.push(response.data.spending);
                 }
             });
         }

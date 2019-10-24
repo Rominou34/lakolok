@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\Table(name="user")
+ * @ORM\HasLifecycleCallbacks
  */
 class User
 {
@@ -247,6 +249,7 @@ class User
      */
     public function onPrePersist(): void {
         $this->created = new DateTime('NOW');
+        $this->updated = new DateTime('NOW');
     }
 
     /**

@@ -8,7 +8,7 @@
                 <router-link class="nav-item" to="/users" active-class="active">Users</router-link>
             </nav>
             !-->
-            <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
                 <router-link class="navbar-brand" to="/">App</router-link>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-content" aria-controls="navbar-content" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>

@@ -42,7 +42,7 @@ final class SpendingController extends AbstractController {
         $request = $request->request;
 
         $spending = new Spending();
-        $spending->setLib($request->get('name'));
+        $spending->setName($request->get('name'));
         $spending->setAmount((float)$request->get('amount'));
         $spending->setDate(new \DateTime($request->get('date')));
         $user = $this->getDoctrine()->getRepository(User::class)->find($request->get('user'));
@@ -54,10 +54,30 @@ final class SpendingController extends AbstractController {
         // actually executes the queries (i.e. the INSERT query)
         $entityManager->flush();
 
-        $data = [
-            'id' => $spending->getId()
+        // We serialize the spending while avoiding circular references
+        $encoder = new JsonEncoder();
+        $defaultContext = [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
         ];
-        $data = $this->serializer->serialize($data, JsonEncoder::FORMAT);
+        $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
+        $serializer = new Serializer([$normalizer], [$encoder]);
+
+        // We get the id and the full name of the user
+        $user = $spending->getUser();
+        $data = [
+            'spending' => [
+                'id' => $spending->getId(),
+                'name' => $spending->getName(),
+                'amount' => $spending->getAmount(),
+                'date' => $spending->getDate(),
+                'userid'=> $user->getId(),
+                'username' => $user->getName().' '.$user->getLastname()
+            ]
+        ];
+        $data = $serializer->serialize($data, JsonEncoder::FORMAT);
+
         return new JsonResponse($data, Response::HTTP_OK, [], true);
     }
 
@@ -84,13 +104,13 @@ final class SpendingController extends AbstractController {
      * @Rest\Get("/", name="getAll")
      */
     public function getAll(): Response {
-        $spendings = $this->em->getRepository(Spending::class)->findBy([], ['date' => 'DESC']);
+        $spendings = $this->em->getRepository(Spending::class)->findBy([], ['date' => 'DESC', 'id' => 'DESC']);
         $spendings_list = [];
         foreach($spendings as &$spending) {
             $user = $spending->getUser();
             $spendings_list[] = [
                 'id' => $spending->getId(),
-                'lib' => $spending->getLib(),
+                'name' => $spending->getName(),
                 'amount' => $spending->getAmount(),
                 'date' => $spending->getDate(),
                 'userid'=> $user->getId(),
