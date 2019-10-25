@@ -5,7 +5,6 @@
             <table class="table hover">
                 <thead class="thead-light">
                     <th>Nom</th>
-                    <th>Prénom</th>
                     <th>Login</th>
                     <th>Email</th>
                     <th>Surnom</th>
@@ -13,7 +12,6 @@
                 <tbody>
                     <router-link v-for="user in users" v-bind:key="user.id"
                         v-bind:to="'/user/'+user.id" tag="tr" class="clickable">
-                        <td>{{ user.lastname }}</td>
                         <td>{{ user.name }}</td>
                         <td>{{ user.login }}</td>
                         <td>{{ user.email }}</td>

@@ -10,15 +10,10 @@
                 </div>
             </div>
             <div class="form-row">
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-12">
                     <label for="signup-name" class="sr-only">Name</label>
                     <input type="text" class="form-control" id="signup-name"
                         v-model="user.name" placeholder="Name"/>
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="signup-lastname" class="sr-only">Last name</label>
-                    <input type="text" class="form-control" id="signup-lastname"
-                        v-model="user.lastname" placeholder="Last name"/>
                 </div>
             </div>
             <div class="form-row">

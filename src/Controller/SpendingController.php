@@ -73,7 +73,7 @@ final class SpendingController extends AbstractController {
                 'amount' => $spending->getAmount(),
                 'date' => $spending->getDate(),
                 'userid'=> $user->getId(),
-                'username' => $user->getName().' '.$user->getLastname()
+                'username' => $user->getName()
             ]
         ];
         $data = $serializer->serialize($data, JsonEncoder::FORMAT);
@@ -114,7 +114,7 @@ final class SpendingController extends AbstractController {
                 'amount' => $spending->getAmount(),
                 'date' => $spending->getDate(),
                 'userid'=> $user->getId(),
-                'username' => $user->getName().' '.$user->getLastname()
+                'username' => $user->getName()
             ];
         }
 

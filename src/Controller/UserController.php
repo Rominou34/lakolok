@@ -45,7 +45,6 @@ final class UserController extends AbstractController {
         $user->setPassword($request->get('password'));
         $user->setMail($request->get('mail'));
         $user->setName($request->get('name'));
-        $user->setLastname($request->get('lastname'));
         $user->setNickname($request->get('nickname'));
 
         // tell Doctrine you want to (eventually) save the Product (no queries yet)
@@ -111,7 +110,7 @@ final class UserController extends AbstractController {
      */
     public function getAllShort(): Response {
         $qb = $this->em->getRepository(User::class)->createQueryBuilder('u')
-            ->select('u.id, u.name, u.lastname')
+            ->select('u.id, u.name')
             ->orderBy('u.id', 'DESC');
 
         $users = $qb->getQuery()->getResult();
