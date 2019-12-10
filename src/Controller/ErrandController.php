@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Errand;
+use App\Entity\ErrandItem;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Request;
@@ -96,14 +97,70 @@ final class ErrandController extends AbstractController {
     public function getAllErrands(): Response {
         $errands = $this->em->getRepository(Errand::class)->findBy([], ['id' => 'DESC']);
         $errands_list = [];
+
+        $encoder = new JsonEncoder();
+        $defaultContext = [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
+        ];
+        $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
+        $serializer = new Serializer([$normalizer], [$encoder]);
+
         foreach($errands as &$errand) {
             $errands_list[] = [
                 'id' => $errand->getId(),
-                'name' => $errand->getName()
+                'name' => $errand->getName(),
+                'items' => $errand->getErrandItems()
             ];
         }
 
-        $data = $this->serializer->serialize($errands_list, JsonEncoder::FORMAT);
+        $data = $serializer->serialize($errands_list, JsonEncoder::FORMAT);
+
+        return new JsonResponse($data, Response::HTTP_OK, [], true);
+    }
+
+    /**
+     *
+     * @Rest\Post("/createItem", name="createItem")
+     */
+    public function createItem(Request $request): Response {
+        $entityManager = $this->getDoctrine()->getManager();
+        $request = $request->request;
+
+        $item = new ErrandItem();
+        $item->setName($request->get('name'));
+        $item->setBought($request->get('bought'));
+
+        // Getting the errand from the id
+        $errand = $this->getDoctrine()->getRepository(Errand::class)->find($request->get('errand'));
+        $item->setErrand($errand);
+
+        // tell Doctrine you want to (eventually) save the Product (no queries yet)
+        $entityManager->persist($item);
+
+        // actually executes the queries (i.e. the INSERT query)
+        $entityManager->flush();
+
+        // We serialize the spending while avoiding circular references
+        $encoder = new JsonEncoder();
+        $defaultContext = [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
+        ];
+        $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
+        $serializer = new Serializer([$normalizer], [$encoder]);
+
+        // We get the id and the full name of the user
+        $data = [
+            'item' => [
+                'id' => $item->getId(),
+                'name' => $item->getName(),
+                'errand' => $item->getErrand()->getId()
+            ]
+        ];
+        $data = $serializer->serialize($data, JsonEncoder::FORMAT);
 
         return new JsonResponse($data, Response::HTTP_OK, [], true);
     }

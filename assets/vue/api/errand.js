@@ -10,4 +10,7 @@ export default {
     get(id) {
         return axios.get("/api/errands/" + id);
     },
+    createItem(item) {
+        return axios.post("/api/errands/createItem", item);
+    }
 };
