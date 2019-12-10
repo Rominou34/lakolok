@@ -5,6 +5,7 @@ import User from "../views/User";
 import UserList from "../views/UserList";
 import Signup from "../views/Signup";
 import Spendings from "../views/Spendings";
+import Errands from "../views/Errands";
 
 Vue.use(VueRouter);
 
@@ -16,6 +17,7 @@ export default new VueRouter({
         { path: "/users", component: UserList },
         { path: "/user/:id", component: User },
         { path: "/signup", component: Signup },
-        { path: "/spendings", component: Spendings }
+        { path: "/spendings", component: Spendings },
+        { path: "/errands", component: Errands }
     ]
 });

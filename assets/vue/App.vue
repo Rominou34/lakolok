@@ -18,6 +18,9 @@
                         <li class="nav-item">
                             <router-link class="nav-link" to="/spendings">Spendings</router-link>
                         </li>
+                        <li class="nav-item">
+                            <router-link class="nav-link" to="/errands">Errands</router-link>
+                        </li>
                         <li>
                             <router-link class="nav-link" to="/users">Users</router-link>
                         </li>

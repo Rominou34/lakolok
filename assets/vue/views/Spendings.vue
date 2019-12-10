@@ -140,7 +140,7 @@ export default {
         getSpendings() {
             SpendingAPI.getAll().then((response) => {
                 this.loaded = true;
-                this.spendings = response.data
+                this.spendings = response.data;
                 this.spendings.forEach(spending => {
                     if(typeof spending.date != "undefined") {
                         spending.displayDate = new Date(spending.date).toLocaleDateString();
